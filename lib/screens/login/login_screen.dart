@@ -112,6 +112,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 20),
 
+              const Text(
+                "Pokemon Wallet",
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFE3350D),
+                ),
+              ),
+
+         
+                ),
               ),
             ],
           ),
