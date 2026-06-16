@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "618249651056",
+    "project_id": "pokemon-marketplace-project",
+    "storage_bucket": "pokemon-marketplace-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618249651056:android:1d3515c0bd37ce5580c5b5",
+        "android_client_info": {
+          "package_name": "com.example.pokemon_marketplace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB94om-5b4Y-Zx_9RL9ANJ4eOP3c7x78Pk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618249651056:android:f6e43e806a6d249a80c5b5",
+        "android_client_info": {
+          "package_name": "com.example.pokemon_wallet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB94om-5b4Y-Zx_9RL9ANJ4eOP3c7x78Pk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
