@@ -137,8 +137,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(20),
-                  child: Column(children: [
-            
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: inputDecoration(
+                          label: "Email",
+                          icon: Icons.email_outlined,
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
