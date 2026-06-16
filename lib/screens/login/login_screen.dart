@@ -121,7 +121,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
 
-         
+              const SizedBox(height: 8),
+
+              Text(
+                "Secure your Pokemon payments",
+                style: TextStyle(color: Colors.grey.shade600),
+              ),
+
+              const SizedBox(height: 40),
+
+                  ),
                 ),
               ),
             ],
