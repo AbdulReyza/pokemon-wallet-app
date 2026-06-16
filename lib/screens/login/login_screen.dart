@@ -20,7 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final authProvider = context.read<AuthProvider>();
 
-      // 1. LOGIN FIREBASE AUTH
       await authProvider.login(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
@@ -28,7 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
       final uid = authProvider.user!.uid;
 
-      // 2. CEK / CREATE WALLET
       final walletDoc = _firestore.collection('wallets').doc(uid);
 
       final doc = await walletDoc.get();
@@ -37,12 +35,11 @@ class _LoginScreenState extends State<LoginScreen> {
         await walletDoc.set({
           'email': emailController.text.trim(),
           'balance': 5000000,
-          'pin': '123456', // sementara untuk UAS (2FA simulasi)
+          'pin': '123456',
           'createdAt': Timestamp.now(),
         });
       }
 
-      // 3. LANJUT KE HOME (kalau pakai routing)
       if (context.mounted) {
         Navigator.pushReplacementNamed(context, '/home');
       }
