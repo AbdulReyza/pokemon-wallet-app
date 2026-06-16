@@ -77,4 +77,46 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<AuthProvider>();
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5F7FA),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              const SizedBox(height: 30),
+
+              /// LOGO
+              Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 15,
+                      color: Colors.black.withOpacity(0.08),
+                    ),
+                  ],
+                ),
+                child: ClipOval(
+                  child: Image.asset('assets/pokeball.png', fit: BoxFit.cover),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
