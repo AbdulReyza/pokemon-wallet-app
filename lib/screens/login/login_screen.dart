@@ -177,7 +177,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.white,
                                   strokeWidth: 2,
                                 )
-                           
+                              : const Text(
+                                  "LOGIN WALLET",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
                         ),
                       ),
                     ],
