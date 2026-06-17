@@ -34,14 +34,18 @@ class AuthProvider extends ChangeNotifier {
     required String name,
     required String email,
     required String password,
+    required String pin,
   }) async {
     isLoading = true;
     notifyListeners();
 
     try {
-      await _authService.register(name: name, email: email, password: password);
-
-      _user = _firebaseAuth.currentUser;
+      await _authService.register(
+        name: name,
+        email: email,
+        password: password,
+        pin: pin,
+      );
     } finally {
       isLoading = false;
       notifyListeners();

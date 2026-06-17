@@ -22,15 +22,28 @@ class AuthService {
     required String name,
     required String email,
     required String password,
+    required String pin,
   }) async {
     final credential = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
 
-    await _firestore.collection('users').doc(credential.user!.uid).set({
+    final uid = credential.user!.uid;
+
+    // data user
+    await _firestore.collection('users').doc(uid).set({
       'name': name,
       'email': email,
+    });
+
+    // data wallet
+    await _firestore.collection('wallets').doc(uid).set({
+      'name': name,
+      'email': email,
+      'balance': 0,
+      'pin': pin,
+      'createdAt': Timestamp.now(),
     });
   }
 
