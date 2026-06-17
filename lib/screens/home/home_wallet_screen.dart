@@ -174,7 +174,42 @@ class HomeWalletScreen extends StatelessWidget {
                   ),
                 ),
 
-           
+                const SizedBox(height: 28),
+
+                /// QUICK ACTIONS
+                const Text(
+                  "Quick Actions",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+
+                const SizedBox(height: 14),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: _ActionCard(
+                        icon: Icons.add_circle,
+                        title: "Top Up",
+                        color: Colors.green,
+                        onTap: () {},
+                      ),
+                    ),
+
+                    const SizedBox(width: 12),
+
+                    Expanded(
+                      child: _ActionCard(
+                        icon: Icons.send,
+                        title: "Transfer",
+                        color: Colors.blue,
+                        onTap: () {},
+                      ),
+                    ),
+
+                    const SizedBox(width: 12),
+
+              ],
+            ),
           );
         },
       ),
