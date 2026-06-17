@@ -207,17 +207,6 @@ class HomeWalletScreen extends StatelessWidget {
 
                     Expanded(
                       child: _ActionCard(
-                        icon: Icons.send,
-                        title: "Transfer",
-                        color: Colors.blue,
-                        onTap: () {},
-                      ),
-                    ),
-
-                    const SizedBox(width: 12),
-
-                    Expanded(
-                      child: _ActionCard(
                         icon: Icons.history,
                         title: "History",
                         color: Colors.orange,
@@ -230,26 +219,68 @@ class HomeWalletScreen extends StatelessWidget {
                 const SizedBox(height: 30),
 
                 /// STAT CARD
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 10,
-                        color: Colors.black.withOpacity(.05),
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('wallet_transactions')
+                      .where('uid', isEqualTo: uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const SizedBox();
+                    }
+
+                    final docs = snapshot.data!.docs;
+
+                    int totalTopup = 0;
+                    int totalSpent = 0;
+                    int totalOrders = 0;
+
+                    for (final doc in docs) {
+                      final data = doc.data() as Map<String, dynamic>;
+
+                      final amount = (data['amount'] ?? 0) as int;
+
+                      if (data['type'] == 'topup') {
+                        totalTopup += amount;
+                      }
+
+                      if (data['type'] == 'purchase') {
+                        totalSpent += amount;
+                        totalOrders++;
+                      }
+                    }
+
+                    return Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 10,
+                            color: Colors.black.withOpacity(.05),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: const [
-                      _StatItem(title: "Pokémon", value: "12"),
-                      _StatItem(title: "Orders", value: "8"),
-                      _StatItem(title: "Level", value: "24"),
-                    ],
-                  ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _StatItem(
+                            title: "Orders",
+                            value: totalOrders.toString(),
+                          ),
+                          _StatItem(
+                            title: "Spent",
+                            value: "${(totalSpent / 1000).toStringAsFixed(0)}K",
+                          ),
+                          _StatItem(
+                            title: "Top Up",
+                            value: "${(totalTopup / 1000).toStringAsFixed(0)}K",
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
 
                 const SizedBox(height: 30),
