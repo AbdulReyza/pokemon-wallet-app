@@ -145,6 +145,34 @@ class HomeWalletScreen extends StatelessWidget {
                             ),
                           ),
 
+                          const SizedBox(height: 12),
+
+                          Text(
+                            currency.format(balance),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 34,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          const SizedBox(height: 30),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                "Trainer Wallet",
+                                style: TextStyle(color: Colors.white70),
+                              ),
+                              Icon(Icons.wallet, color: Colors.white),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
 
            
           );
