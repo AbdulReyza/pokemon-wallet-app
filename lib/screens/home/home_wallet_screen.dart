@@ -274,21 +274,23 @@ class HomeWalletScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: StreamBuilder<QuerySnapshot>(
+                  child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                     stream: FirebaseFirestore.instance
                         .collection('wallet_transactions')
                         .where('uid', isEqualTo: uid)
-                        .orderBy('createdAt', descending: true)
-                        .limit(10)
                         .snapshots(),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
+                      if (snapshot.hasError) {
+                        return Text("Firestore Error:\n${snapshot.error}");
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       }
 
-                      final transactions = snapshot.data!.docs;
+                      final docs = snapshot.data?.docs ?? [];
 
-                      if (transactions.isEmpty) {
+                      if (docs.isEmpty) {
                         return const Padding(
                           padding: EdgeInsets.all(20),
                           child: Center(
@@ -301,10 +303,24 @@ class HomeWalletScreen extends StatelessWidget {
                       }
 
                       return Column(
-                        children: transactions.map((doc) {
-                          final data = doc.data() as Map<String, dynamic>;
+                        children: docs.map((doc) {
+                          final data = doc.data();
 
-                          final isTopup = data['type'] == 'topup';
+                          final amount = data['amount'] ?? 0;
+                          final type = data['type'] ?? 'unknown';
+
+                          String dateText = '-';
+
+                          try {
+                            final createdAt = data['createdAt'];
+
+                            if (createdAt is Timestamp) {
+                              dateText =
+                                  "${createdAt.toDate().day}/${createdAt.toDate().month}/${createdAt.toDate().year}";
+                            }
+                          } catch (_) {}
+
+                          final isTopup = type == 'topup';
 
                           return Column(
                             children: [
@@ -323,20 +339,10 @@ class HomeWalletScreen extends StatelessWidget {
                                       : "Pokemon Purchase",
                                 ),
 
-                                subtitle: Text(
-                                  data['createdAt'] != null
-                                      ? DateFormat(
-                                          'dd MMM yyyy HH:mm',
-                                          'id_ID',
-                                        ).format(
-                                          (data['createdAt'] as Timestamp)
-                                              .toDate(),
-                                        )
-                                      : '-',
-                                ),
+                                subtitle: Text(dateText),
 
                                 trailing: Text(
-                                  "${isTopup ? '+' : '-'} Rp ${data['amount']}",
+                                  "${isTopup ? '+' : '-'} Rp $amount",
                                   style: TextStyle(
                                     color: isTopup ? Colors.green : Colors.red,
                                     fontWeight: FontWeight.bold,
