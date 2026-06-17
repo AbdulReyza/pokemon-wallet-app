@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'providers/auth_provider.dart';
 import 'screens/login/login_screen.dart';
+import 'screens/home/home_wallet_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +32,10 @@ class MyApp extends StatelessWidget {
 
         home: const LoginScreen(),
 
-        routes: {'/login': (_) => const LoginScreen()},
+        routes: {
+          '/login': (_) => const LoginScreen(),
+          '/home': (_) => const HomeWalletScreen(),
+        },
       ),
     );
   }
