@@ -234,7 +234,23 @@ class HomeWalletScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-               
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: const [
+                      _StatItem(title: "Pokémon", value: "12"),
+                      _StatItem(title: "Orders", value: "8"),
+                      _StatItem(title: "Level", value: "24"),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 30),
+
+                /// RECENT TRANSACTIONS
+                const Text(
+                  "Recent Transactions",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           );
