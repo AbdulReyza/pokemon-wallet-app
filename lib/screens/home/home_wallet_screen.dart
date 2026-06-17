@@ -119,7 +119,32 @@ class HomeWalletScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        right: -20,
+                        top: -20,
+                        child: Opacity(
+                          opacity: .15,
+                          child: Icon(
+                            Icons.catching_pokemon,
+                            size: 130,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "PokéCoin Balance",
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 16,
+                            ),
+                          ),
+
 
            
           );
