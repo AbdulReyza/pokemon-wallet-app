@@ -42,7 +42,26 @@ class HomeWalletScreen extends StatelessWidget {
             decimalDigits: 0,
           );
 
-        
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// HEADER TRAINER
+                Row(
+                  children: [
+                    Container(
+                      width: 75,
+                      height: 75,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                          color: const Color(0xFFE3350D),
+                          width: 3,
+                        ),
+             
+         
 
            
           );
