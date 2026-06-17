@@ -251,6 +251,43 @@ class HomeWalletScreen extends StatelessWidget {
                   "Recent Transactions",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
+
+                const SizedBox(height: 15),
+
+                Container(
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 10,
+                        color: Colors.black.withOpacity(.05),
+                      ),
+                    ],
+                  ),
+                  child: const Column(
+                    children: [
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: CircleAvatar(child: Icon(Icons.add)),
+                        title: Text("Top Up Wallet"),
+                        subtitle: Text("Today"),
+                        trailing: Text(
+                          "+ Rp 50.000",
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+
+                      Divider(),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 30),
               ],
             ),
           );
