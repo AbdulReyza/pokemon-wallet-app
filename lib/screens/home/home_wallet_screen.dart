@@ -338,6 +338,13 @@ class _ActionCard extends StatelessWidget {
             BoxShadow(blurRadius: 10, color: Colors.black.withOpacity(.05)),
           ],
         ),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 32),
+            const SizedBox(height: 8),
+            Text(title),
+          ],
+        ),
       ),
     );
   }
