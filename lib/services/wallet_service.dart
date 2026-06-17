@@ -15,6 +15,13 @@ class WalletService {
 
       await walletDoc.update({'balance': currentBalance + amount});
     }
+
+    await _firestore.collection('wallet_transactions').add({
+      'uid': uid,
+      'amount': amount,
+      'type': 'topup',
+      'createdAt': Timestamp.now(),
+    });
   }
 
   Future<void> payOrder({required String orderId, required int amount}) async {
