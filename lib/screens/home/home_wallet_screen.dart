@@ -349,3 +349,28 @@ class _ActionCard extends StatelessWidget {
     );
   }
 }
+
+class _StatItem extends StatelessWidget {
+  final String title;
+  final String value;
+
+  const _StatItem({required this.title, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFE3350D),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(title, style: const TextStyle(color: Colors.grey)),
+      ],
+    );
+  }
+}
