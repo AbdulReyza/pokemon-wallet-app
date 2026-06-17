@@ -5,6 +5,7 @@ class WalletService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
   Future<void> topUp(int amount) async {
     final doc = await walletDoc.get();
 
