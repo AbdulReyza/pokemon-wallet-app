@@ -24,7 +24,9 @@ class _LoginScreenState extends State<LoginScreen> {
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
       final uid = authProvider.user!.uid;
 
       final walletDoc = _firestore.collection('wallets').doc(uid);
