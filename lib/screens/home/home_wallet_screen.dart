@@ -22,6 +22,27 @@ class HomeWalletScreen extends StatelessWidget {
         ),
       ),
 
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('wallets')
+            .doc(uid)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final data = snapshot.data?.data() as Map<String, dynamic>?;
+
+          final balance = data?['balance'] ?? 0;
+
+          final currency = NumberFormat.currency(
+            locale: 'id_ID',
+            symbol: 'Rp ',
+            decimalDigits: 0,
+          );
+
+        
 
            
           );
