@@ -274,42 +274,84 @@ class HomeWalletScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Column(
-                    children: [
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: CircleAvatar(child: Icon(Icons.add)),
-                        title: Text("Top Up Wallet"),
-                        subtitle: Text("Today"),
-                        trailing: Text(
-                          "+ Rp 50.000",
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('wallet_transactions')
+                        .where('uid', isEqualTo: uid)
+                        .orderBy('createdAt', descending: true)
+                        .limit(10)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
-                      Divider(),
+                      final transactions = snapshot.data!.docs;
 
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: CircleAvatar(child: Icon(Icons.shopping_cart)),
-                        title: Text("Buy Pikachu"),
-                        subtitle: Text("Yesterday"),
-                        trailing: Text(
-                          "- Rp 15.000",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
+                      if (transactions.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(
+                            child: Text(
+                              "Belum ada transaksi",
+                              style: TextStyle(color: Colors.grey),
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
+                        );
+                      }
+
+                      return Column(
+                        children: transactions.map((doc) {
+                          final data = doc.data() as Map<String, dynamic>;
+
+                          final isTopup = data['type'] == 'topup';
+
+                          return Column(
+                            children: [
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+
+                                leading: CircleAvatar(
+                                  child: Icon(
+                                    isTopup ? Icons.add : Icons.shopping_cart,
+                                  ),
+                                ),
+
+                                title: Text(
+                                  isTopup
+                                      ? "Top Up Wallet"
+                                      : "Pokemon Purchase",
+                                ),
+
+                                subtitle: Text(
+                                  data['createdAt'] != null
+                                      ? DateFormat(
+                                          'dd MMM yyyy HH:mm',
+                                          'id_ID',
+                                        ).format(
+                                          (data['createdAt'] as Timestamp)
+                                              .toDate(),
+                                        )
+                                      : '-',
+                                ),
+
+                                trailing: Text(
+                                  "${isTopup ? '+' : '-'} Rp ${data['amount']}",
+                                  style: TextStyle(
+                                    color: isTopup ? Colors.green : Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+
+                              const Divider(),
+                            ],
+                          );
+                        }).toList(),
+                      );
+                    },
                   ),
                 ),
-
-                const SizedBox(height: 30),
               ],
             ),
           );
