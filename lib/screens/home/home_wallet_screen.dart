@@ -208,6 +208,33 @@ class HomeWalletScreen extends StatelessWidget {
 
                     const SizedBox(width: 12),
 
+                    Expanded(
+                      child: _ActionCard(
+                        icon: Icons.history,
+                        title: "History",
+                        color: Colors.orange,
+                        onTap: () {},
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 30),
+
+                /// STAT CARD
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 10,
+                        color: Colors.black.withOpacity(.05),
+                      ),
+                    ],
+                  ),
+               
               ],
             ),
           );
