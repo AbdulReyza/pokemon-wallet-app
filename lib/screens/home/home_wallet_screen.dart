@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../topup/topup_screen.dart';
 
 class HomeWalletScreen extends StatelessWidget {
   const HomeWalletScreen({super.key});
@@ -191,7 +192,14 @@ class HomeWalletScreen extends StatelessWidget {
                         icon: Icons.add_circle,
                         title: "Top Up",
                         color: Colors.green,
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const TopUpScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ),
 

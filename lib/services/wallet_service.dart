@@ -5,6 +5,17 @@ class WalletService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  Future<void> topUp(int amount) async {
+    final doc = await walletDoc.get();
+
+    if (!doc.exists) {
+      await walletDoc.set({'balance': amount});
+    } else {
+      final currentBalance = (doc.data()?['balance'] ?? 0) as int;
+
+      await walletDoc.update({'balance': currentBalance + amount});
+    }
+  }
 
   String get uid => _auth.currentUser!.uid;
 

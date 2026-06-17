@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!doc.exists) {
         await walletDoc.set({
           'email': emailController.text.trim(),
-          'balance': 5000000,
+          'balance': 0,
           'pin': '123456',
           'createdAt': Timestamp.now(),
         });
