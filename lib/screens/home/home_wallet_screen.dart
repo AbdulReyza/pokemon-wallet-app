@@ -74,7 +74,33 @@ class HomeWalletScreen extends StatelessWidget {
                       ),
                     ),
 
-         
+                    const SizedBox(width: 16),
+
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Welcome Back",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            "Pokemon Trainer",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 24),
+
+        
 
            
           );
