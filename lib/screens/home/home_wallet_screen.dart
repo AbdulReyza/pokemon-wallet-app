@@ -283,6 +283,20 @@ class HomeWalletScreen extends StatelessWidget {
                       ),
 
                       Divider(),
+
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: CircleAvatar(child: Icon(Icons.shopping_cart)),
+                        title: Text("Buy Pikachu"),
+                        subtitle: Text("Yesterday"),
+                        trailing: Text(
+                          "- Rp 15.000",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -295,4 +309,18 @@ class HomeWalletScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ActionCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _ActionCard({
+    required this.icon,
+    required this.title,
+    required this.color,
+    required this.onTap,
+  });
 }
