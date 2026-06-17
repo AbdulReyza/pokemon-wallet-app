@@ -218,73 +218,6 @@ class HomeWalletScreen extends StatelessWidget {
 
                 const SizedBox(height: 30),
 
-                /// STAT CARD
-                StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('wallet_transactions')
-                      .where('uid', isEqualTo: uid)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const SizedBox();
-                    }
-
-                    final docs = snapshot.data!.docs;
-
-                    int totalTopup = 0;
-                    int totalSpent = 0;
-                    int totalOrders = 0;
-
-                    for (final doc in docs) {
-                      final data = doc.data() as Map<String, dynamic>;
-
-                      final amount = (data['amount'] ?? 0) as int;
-
-                      if (data['type'] == 'topup') {
-                        totalTopup += amount;
-                      }
-
-                      if (data['type'] == 'purchase') {
-                        totalSpent += amount;
-                        totalOrders++;
-                      }
-                    }
-
-                    return Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 10,
-                            color: Colors.black.withOpacity(.05),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _StatItem(
-                            title: "Orders",
-                            value: totalOrders.toString(),
-                          ),
-                          _StatItem(
-                            title: "Spent",
-                            value: "${(totalSpent / 1000).toStringAsFixed(0)}K",
-                          ),
-                          _StatItem(
-                            title: "Top Up",
-                            value: "${(totalTopup / 1000).toStringAsFixed(0)}K",
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-
-                const SizedBox(height: 30),
-
                 /// RECENT TRANSACTIONS
                 const Text(
                   "Recent Transactions",
@@ -433,31 +366,6 @@ class _ActionCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _StatItem extends StatelessWidget {
-  final String title;
-  final String value;
-
-  const _StatItem({required this.title, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFFE3350D),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(title, style: const TextStyle(color: Colors.grey)),
-      ],
     );
   }
 }
