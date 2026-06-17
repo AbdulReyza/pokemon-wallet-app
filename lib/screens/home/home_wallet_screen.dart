@@ -60,7 +60,20 @@ class HomeWalletScreen extends StatelessWidget {
                           color: const Color(0xFFE3350D),
                           width: 3,
                         ),
-             
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 10,
+                            color: Colors.black.withOpacity(.08),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.catching_pokemon,
+                        color: Color(0xFFE3350D),
+                        size: 42,
+                      ),
+                    ),
+
          
 
            
