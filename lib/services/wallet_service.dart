@@ -17,6 +17,31 @@ class WalletService {
     }
   }
 
+  Future<void> payOrder({required String orderId, required int amount}) async {
+    final wallet = await walletDoc.get();
+
+    final balance = (wallet.data()?['balance'] ?? 0) as int;
+
+    if (balance < amount) {
+      throw Exception("Insufficient balance");
+    }
+
+    await walletDoc.update({'balance': balance - amount});
+
+    await _firestore.collection('wallet_transactions').add({
+      'uid': uid,
+      'orderId': orderId,
+      'amount': amount,
+      'type': 'payment',
+      'createdAt': Timestamp.now(),
+    });
+
+    await _firestore.collection('orders').doc(orderId).update({
+      'status': 'paid',
+      'paidAt': Timestamp.now(),
+    });
+  }
+
   String get uid => _auth.currentUser!.uid;
 
   DocumentReference<Map<String, dynamic>> get walletDoc =>
