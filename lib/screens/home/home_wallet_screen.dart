@@ -323,4 +323,22 @@ class _ActionCard extends StatelessWidget {
     required this.color,
     required this.onTap,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(18),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(blurRadius: 10, color: Colors.black.withOpacity(.05)),
+          ],
+        ),
+      ),
+    );
+  }
 }
