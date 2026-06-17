@@ -100,7 +100,26 @@ class HomeWalletScreen extends StatelessWidget {
 
                 const SizedBox(height: 24),
 
-        
+                /// WALLET CARD
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFFE3350D), Color(0xFF3B82F6)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 18,
+                        offset: const Offset(0, 8),
+                        color: Colors.black.withOpacity(.15),
+                      ),
+                    ],
+                  ),
+                
 
            
           );
