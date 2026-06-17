@@ -77,23 +77,56 @@ class HomeWalletScreen extends StatelessWidget {
 
                     const SizedBox(width: 16),
 
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Welcome Back",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            "Pokemon Trainer",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                    Expanded(
+                      child: FutureBuilder<DocumentSnapshot>(
+                        future: FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(uid)
+                            .get(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Welcome Back",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  "Loading...",
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+
+                          final userData =
+                              snapshot.data!.data() as Map<String, dynamic>?;
+
+                          final name = userData?['name'] ?? 'Pokemon Trainer';
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Welcome Back",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                name,
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ],
