@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../qr/scan_qr_screen.dart';
+import '../qr/my_qr_screen.dart';
 import '../topup/topup_screen.dart';
 
 class HomeWalletScreen extends StatelessWidget {
@@ -34,7 +36,6 @@ class HomeWalletScreen extends StatelessWidget {
           }
 
           final data = snapshot.data?.data() as Map<String, dynamic>?;
-
           final balance = data?['balance'] ?? 0;
 
           final currency = NumberFormat.currency(
@@ -74,7 +75,6 @@ class HomeWalletScreen extends StatelessWidget {
                         size: 42,
                       ),
                     ),
-
                     const SizedBox(width: 16),
 
                     Expanded(
@@ -106,7 +106,6 @@ class HomeWalletScreen extends StatelessWidget {
 
                           final userData =
                               snapshot.data!.data() as Map<String, dynamic>?;
-
                           final name = userData?['name'] ?? 'Pokemon Trainer';
 
                           return Column(
@@ -167,7 +166,6 @@ class HomeWalletScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -178,9 +176,7 @@ class HomeWalletScreen extends StatelessWidget {
                               fontSize: 16,
                             ),
                           ),
-
                           const SizedBox(height: 12),
-
                           Text(
                             currency.format(balance),
                             style: const TextStyle(
@@ -189,12 +185,10 @@ class HomeWalletScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-
                           const SizedBox(height: 30),
-
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
+                            children: [
                               Text(
                                 "Trainer Wallet",
                                 style: TextStyle(color: Colors.white70),
@@ -215,7 +209,6 @@ class HomeWalletScreen extends StatelessWidget {
                   "Quick Actions",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
-
                 const SizedBox(height: 14),
 
                 Row(
@@ -232,6 +225,48 @@ class HomeWalletScreen extends StatelessWidget {
                               builder: (_) => const TopUpScreen(),
                             ),
                           );
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+
+                    Expanded(
+                      child: _ActionCard(
+                        icon: Icons.qr_code,
+                        title: "My QR",
+                        color: Colors.blue,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const MyQrScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+
+                    Expanded(
+                      child: _ActionCard(
+                        icon: Icons.qr_code_scanner,
+                        title: "Scan QR",
+                        color: Colors.orange,
+                        onTap: () async {
+                          final scannedUid = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ScanQrScreen(),
+                            ),
+                          );
+
+                          if (scannedUid != null && context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("UID ditemukan: $scannedUid"),
+                              ),
+                            );
+                          }
                         },
                       ),
                     ),
@@ -256,7 +291,6 @@ class HomeWalletScreen extends StatelessWidget {
                   "Recent Transactions",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
-
                 const SizedBox(height: 15),
 
                 Container(
@@ -308,14 +342,11 @@ class HomeWalletScreen extends StatelessWidget {
 
                           String dateText = '-';
 
-                          try {
-                            final createdAt = data['createdAt'];
-
-                            if (createdAt is Timestamp) {
-                              dateText =
-                                  "${createdAt.toDate().day}/${createdAt.toDate().month}/${createdAt.toDate().year}";
-                            }
-                          } catch (_) {}
+                          final createdAt = data['createdAt'];
+                          if (createdAt is Timestamp) {
+                            final d = createdAt.toDate();
+                            dateText = "${d.day}/${d.month}/${d.year}";
+                          }
 
                           final isTopup = type == 'topup';
 
@@ -323,21 +354,17 @@ class HomeWalletScreen extends StatelessWidget {
                             children: [
                               ListTile(
                                 contentPadding: EdgeInsets.zero,
-
                                 leading: CircleAvatar(
                                   child: Icon(
                                     isTopup ? Icons.add : Icons.shopping_cart,
                                   ),
                                 ),
-
                                 title: Text(
                                   isTopup
                                       ? "Top Up Wallet"
                                       : "Pokemon Purchase",
                                 ),
-
                                 subtitle: Text(dateText),
-
                                 trailing: Text(
                                   "${isTopup ? '+' : '-'} Rp $amount",
                                   style: TextStyle(
@@ -346,7 +373,6 @@ class HomeWalletScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-
                               const Divider(),
                             ],
                           );
@@ -364,6 +390,7 @@ class HomeWalletScreen extends StatelessWidget {
   }
 }
 
+/// ACTION CARD
 class _ActionCard extends StatelessWidget {
   final IconData icon;
   final String title;
