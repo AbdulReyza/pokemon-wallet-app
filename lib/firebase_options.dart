@@ -41,48 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB6RMXBsvzLB6-GfV0dG8h-6293m1Dgoao',
-    appId: '1:618249651056:web:5cd9c51881a6874a80c5b5',
-    messagingSenderId: '618249651056',
-    projectId: 'pokemon-marketplace-project',
-    authDomain: 'pokemon-marketplace-project.firebaseapp.com',
-    storageBucket: 'pokemon-marketplace-project.firebasestorage.app',
-    measurementId: 'G-9MTK85N4VK',
+    apiKey: 'AIzaSyDgs8F4fPaxWvEzeu-3lKfXo1dv3EyglUU',
+    appId: '1:916574992698:web:822b1c58ccf00b11fcf803',
+    messagingSenderId: '916574992698',
+    projectId: 'pokemon-marketplace-reza',
+    authDomain: 'pokemon-marketplace-reza.firebaseapp.com',
+    storageBucket: 'pokemon-marketplace-reza.firebasestorage.app',
+    measurementId: 'G-PMYSX5VE83',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB94om-5b4Y-Zx_9RL9ANJ4eOP3c7x78Pk',
-    appId: '1:618249651056:android:f6e43e806a6d249a80c5b5',
-    messagingSenderId: '618249651056',
-    projectId: 'pokemon-marketplace-project',
-    storageBucket: 'pokemon-marketplace-project.firebasestorage.app',
+    apiKey: 'AIzaSyDnrNMO1GRc7JPmaqwo8B4uU_xht3nvcRA',
+    appId: '1:916574992698:android:8f8d274f1be1856ffcf803',
+    messagingSenderId: '916574992698',
+    projectId: 'pokemon-marketplace-reza',
+    storageBucket: 'pokemon-marketplace-reza.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBeD0UAzLtH7RuelEI9u_KwdsC-phkH5Jo',
-    appId: '1:618249651056:ios:3ea4fd9797d9460e80c5b5',
-    messagingSenderId: '618249651056',
-    projectId: 'pokemon-marketplace-project',
-    storageBucket: 'pokemon-marketplace-project.firebasestorage.app',
+    apiKey: 'AIzaSyCHzB7phSB2Vut4bU9vUdm8dg0tJPdiEOc',
+    appId: '1:916574992698:ios:bca7b3f0019287c0fcf803',
+    messagingSenderId: '916574992698',
+    projectId: 'pokemon-marketplace-reza',
+    storageBucket: 'pokemon-marketplace-reza.firebasestorage.app',
     iosBundleId: 'com.example.pokemonWallet',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBeD0UAzLtH7RuelEI9u_KwdsC-phkH5Jo',
-    appId: '1:618249651056:ios:3ea4fd9797d9460e80c5b5',
-    messagingSenderId: '618249651056',
-    projectId: 'pokemon-marketplace-project',
-    storageBucket: 'pokemon-marketplace-project.firebasestorage.app',
+    apiKey: 'AIzaSyCHzB7phSB2Vut4bU9vUdm8dg0tJPdiEOc',
+    appId: '1:916574992698:ios:bca7b3f0019287c0fcf803',
+    messagingSenderId: '916574992698',
+    projectId: 'pokemon-marketplace-reza',
+    storageBucket: 'pokemon-marketplace-reza.firebasestorage.app',
     iosBundleId: 'com.example.pokemonWallet',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyB6RMXBsvzLB6-GfV0dG8h-6293m1Dgoao',
-    appId: '1:618249651056:web:ae80716dd110a5d180c5b5',
-    messagingSenderId: '618249651056',
-    projectId: 'pokemon-marketplace-project',
-    authDomain: 'pokemon-marketplace-project.firebaseapp.com',
-    storageBucket: 'pokemon-marketplace-project.firebasestorage.app',
-    measurementId: 'G-F0X4S6MZP9',
+    apiKey: 'AIzaSyDgs8F4fPaxWvEzeu-3lKfXo1dv3EyglUU',
+    appId: '1:916574992698:web:9ef9fff2c45f939ffcf803',
+    messagingSenderId: '916574992698',
+    projectId: 'pokemon-marketplace-reza',
+    authDomain: 'pokemon-marketplace-reza.firebaseapp.com',
+    storageBucket: 'pokemon-marketplace-reza.firebasestorage.app',
+    measurementId: 'G-KG7WN8FE7D',
   );
+
 }
