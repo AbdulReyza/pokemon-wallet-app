@@ -1,1 +1,25 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"pokemon-marketplace-project","appId":"1:618249651056:android:f6e43e806a6d249a80c5b5","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"pokemon-marketplace-project","configurations":{"android":"1:618249651056:android:f6e43e806a6d249a80c5b5","ios":"1:618249651056:ios:3ea4fd9797d9460e80c5b5","macos":"1:618249651056:ios:3ea4fd9797d9460e80c5b5","web":"1:618249651056:web:5cd9c51881a6874a80c5b5","windows":"1:618249651056:web:ae80716dd110a5d180c5b5"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "pokemon-marketplace-reza",
+          "appId": "1:916574992698:android:8f8d274f1be1856ffcf803",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "pokemon-marketplace-reza",
+          "configurations": {
+            "android": "1:916574992698:android:8f8d274f1be1856ffcf803",
+            "ios": "1:916574992698:ios:bca7b3f0019287c0fcf803",
+            "macos": "1:916574992698:ios:bca7b3f0019287c0fcf803",
+            "web": "1:916574992698:web:822b1c58ccf00b11fcf803",
+            "windows": "1:916574992698:web:9ef9fff2c45f939ffcf803"
+          }
+        }
+      }
+    }
+  }
+}

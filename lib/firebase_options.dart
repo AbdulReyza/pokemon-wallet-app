@@ -85,5 +85,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'pokemon-marketplace-reza.firebasestorage.app',
     measurementId: 'G-KG7WN8FE7D',
   );
-
 }

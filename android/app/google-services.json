@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "618249651056",
-    "project_id": "pokemon-marketplace-project",
-    "storage_bucket": "pokemon-marketplace-project.firebasestorage.app"
+    "project_number": "916574992698",
+    "project_id": "pokemon-marketplace-reza",
+    "storage_bucket": "pokemon-marketplace-reza.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:618249651056:android:1d3515c0bd37ce5580c5b5",
+        "mobilesdk_app_id": "1:916574992698:android:26b2d97121a5d4edfcf803",
         "android_client_info": {
           "package_name": "com.example.pokemon_marketplace"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB94om-5b4Y-Zx_9RL9ANJ4eOP3c7x78Pk"
+          "current_key": "AIzaSyDnrNMO1GRc7JPmaqwo8B4uU_xht3nvcRA"
         }
       ],
       "services": {
@@ -26,7 +26,7 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:618249651056:android:f6e43e806a6d249a80c5b5",
+        "mobilesdk_app_id": "1:916574992698:android:8f8d274f1be1856ffcf803",
         "android_client_info": {
           "package_name": "com.example.pokemon_wallet"
         }
@@ -34,7 +34,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB94om-5b4Y-Zx_9RL9ANJ4eOP3c7x78Pk"
+          "current_key": "AIzaSyDnrNMO1GRc7JPmaqwo8B4uU_xht3nvcRA"
         }
       ],
       "services": {
