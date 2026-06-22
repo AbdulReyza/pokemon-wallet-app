@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../providers/auth_provider.dart';
+import '../auth/otp_totp_authenticator.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,15 +16,27 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   Future<void> login() async {
     try {
       final authProvider = context.read<AuthProvider>();
 
+      // LOGIN FIREBASE DULU
       await authProvider.login(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
+
+      // TAMPILKAN AUTHENTICATOR
+      final verified = await Navigator.push<bool>(
+        context,
+        MaterialPageRoute(builder: (_) => const AuthVerificationScreen()),
+      );
+
+      // kalau user batal atau salah OTP
+      if (verified != true) {
+        await authProvider.logout(); // logout lagi
+        return;
+      }
 
       final uid = authProvider.user!.uid;
 
