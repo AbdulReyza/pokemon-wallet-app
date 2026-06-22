@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../providers/auth_provider.dart';
 import '../auth/otp_totp_authenticator.dart';
+import '../../services/email_service.dart';
+import 'dart:math';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,32 +17,21 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<void> login() async {
     try {
       final authProvider = context.read<AuthProvider>();
 
-      // LOGIN FIREBASE DULU
       await authProvider.login(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
 
-      // TAMPILKAN AUTHENTICATOR
-      final verified = await Navigator.push<bool>(
-        context,
-        MaterialPageRoute(builder: (_) => const AuthVerificationScreen()),
-      );
-
-      // kalau user batal atau salah OTP
-      if (verified != true) {
-        await authProvider.logout(); // logout lagi
-        return;
-      }
-
       final uid = authProvider.user!.uid;
 
-      final walletDoc = _firestore.collection('wallets').doc(uid);
+      final walletDoc = FirebaseFirestore.instance
+          .collection('wallets')
+          .doc(uid);
 
       final doc = await walletDoc.get();
 
@@ -53,12 +44,41 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
 
+      final otp = (100000 + Random().nextInt(900000)).toString();
+
+      await FirebaseFirestore.instance.collection('otp_codes').doc(uid).set({
+        'otp': otp,
+        'expiresAt': Timestamp.fromDate(
+          DateTime.now().add(const Duration(minutes: 5)),
+        ),
+      });
+
+      // 5. SEND EMAIL OTP
+      await EmailService().sendOtp(
+        email: emailController.text.trim(),
+        otp: otp,
+      );
+
       if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("OTP terkirim ke email")));
+
+      // 6. OPEN OTP SCREEN
+      final verified = await Navigator.push<bool>(
+        context,
+        MaterialPageRoute(builder: (_) => const AuthVerificationScreen()),
+      );
+
+      // 7. CHECK RESULT
+      if (verified != true) {
+        await authProvider.logout();
+        return;
+      }
 
       Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
-      if (!mounted) return;
-
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(e.toString())));
