@@ -218,12 +218,12 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../../services/authenticator_service.dart';
+// import '../../services/authenticator_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthVerificationScreen extends StatefulWidget {
-  final String secret;
-
-  const AuthVerificationScreen({super.key, required this.secret});
+  const AuthVerificationScreen({super.key});
 
   @override
   State<AuthVerificationScreen> createState() => _AuthVerificationScreenState();
@@ -262,17 +262,31 @@ class _AuthVerificationScreenState extends State<AuthVerificationScreen> {
     setState(() => loading = true);
 
     try {
-      final valid = AuthenticatorService.verifyCode(
-        secret: widget.secret,
-        code: pinController.text.trim(),
-      );
+      final uid = FirebaseAuth.instance.currentUser!.uid;
 
-      if (valid) {
+      final doc = await FirebaseFirestore.instance
+          .collection('otp_codes')
+          .doc(uid)
+          .get();
+
+      if (!doc.exists) {
+        throw Exception("OTP tidak ditemukan");
+      }
+
+      final data = doc.data()!;
+
+      final savedOtp = data['otp'];
+
+      final expiresAt = (data['expiresAt'] as Timestamp).toDate();
+
+      if (DateTime.now().isAfter(expiresAt)) {
+        throw Exception("OTP sudah expired");
+      }
+
+      if (pinController.text.trim() == savedOtp) {
         Navigator.pop(context, true);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Kode Google Authenticator salah")),
-        );
+        throw Exception("Kode OTP salah");
       }
     } catch (e) {
       ScaffoldMessenger.of(
@@ -332,7 +346,7 @@ class _AuthVerificationScreenState extends State<AuthVerificationScreen> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          "Google Authenticator",
+                          "Email Verification",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 22,
@@ -346,14 +360,14 @@ class _AuthVerificationScreenState extends State<AuthVerificationScreen> {
                   const SizedBox(height: 20),
 
                   const Text(
-                    "Authenticator Verification",
+                    "OTP Verification",
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
 
                   const SizedBox(height: 8),
 
                   Text(
-                    "Masukkan kode 6 digit dari aplikasi Google Authenticator.",
+                    "Masukkan kode OTP 6 digit yang telah dikirim ke email Anda.",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.grey.shade600),
                   ),

@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../providers/auth_provider.dart';
 import '../auth/otp_totp_authenticator.dart';
-// import '../../services/email_service.dart';
-// import 'dart:math';
-import '../../services/authenticator_service.dart';
-import '../auth/setup_authenticator.dart';
+import '../../services/email_service.dart';
+import 'dart:math';
+// import '../../services/authenticator_service.dart';
+// import '../auth/setup_authenticator.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,6 +18,12 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  String generateOtp() {
+    final random = Random();
+
+    return (100000 + random.nextInt(900000)).toString();
+  }
+
   Future<void> login() async {
     try {
       final authProvider = context.read<AuthProvider>();
@@ -29,72 +35,37 @@ class _LoginScreenState extends State<LoginScreen> {
 
       final uid = authProvider.user!.uid;
 
-      final walletDoc = FirebaseFirestore.instance
-          .collection('wallets')
-          .doc(uid);
+      final otp = generateOtp();
 
-      final doc = await walletDoc.get();
+      await FirebaseFirestore.instance.collection('otp_codes').doc(uid).set({
+        'otp': otp,
+        'expiresAt': Timestamp.fromDate(
+          DateTime.now().add(const Duration(minutes: 5)),
+        ),
+      });
 
-      String? authSecret;
-
-      // Jika wallet belum ada
-      if (!doc.exists) {
-        await walletDoc.set({
-          'email': emailController.text.trim(),
-          'balance': 0,
-          'pin': '123456',
-          'createdAt': Timestamp.now(),
-          'authSecret': null,
-        });
-
-        authSecret = null;
-      } else {
-        authSecret = doc.data()?['authSecret'];
-      }
-
-      // LOGIN PERTAMA → BELUM ADA AUTHENTICATOR
-      if (authSecret == null || authSecret.isEmpty) {
-        authSecret = AuthenticatorService.generateSecret();
-
-        await walletDoc.update({'authSecret': authSecret});
-
-        if (!mounted) return;
-
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => SetupAuthenticatorScreen(
-              email: emailController.text.trim(),
-              secret: authSecret!,
-            ),
-          ),
-        );
-      }
+      await EmailService().sendOtp(
+        email: emailController.text.trim(),
+        otp: otp,
+      );
 
       if (!mounted) return;
 
-      // MINTA KODE GOOGLE AUTHENTICATOR
       final verified = await Navigator.push<bool>(
         context,
-        MaterialPageRoute(
-          builder: (_) => AuthVerificationScreen(secret: authSecret!),
-        ),
+        MaterialPageRoute(builder: (_) => const AuthVerificationScreen()),
       );
 
-      // JIKA GAGAL MFA
       if (verified != true) {
         await authProvider.logout();
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Verifikasi Google Authenticator gagal"),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Verifikasi OTP gagal")));
 
         return;
       }
 
-      // BERHASIL LOGIN
       Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
       ScaffoldMessenger.of(
