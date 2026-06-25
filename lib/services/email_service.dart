@@ -15,11 +15,6 @@ class EmailService {
       }),
     );
 
-    print("========== EMAILJS ==========");
-    print("STATUS : ${response.statusCode}");
-    print("BODY   : ${response.body}");
-    print("=============================");
-
     if (response.statusCode != 200) {
       throw Exception("Gagal mengirim OTP. Status: ${response.statusCode}");
     }
