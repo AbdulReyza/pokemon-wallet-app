@@ -5,8 +5,6 @@ import '../../providers/auth_provider.dart';
 import '../auth/otp_totp_authenticator.dart';
 import '../../services/email_service.dart';
 import 'dart:math';
-// import '../../services/authenticator_service.dart';
-// import '../auth/setup_authenticator.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

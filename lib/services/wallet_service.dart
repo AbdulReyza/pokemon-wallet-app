@@ -44,10 +44,7 @@ class WalletService {
       'createdAt': Timestamp.now(),
     });
 
-    await _firestore.collection('orders').doc(orderId).update({
-      'status': 'paid',
-      'paidAt': Timestamp.now(),
-    });
+    // HAPUS BAGIAN UPDATE ORDERS
   }
 
   String get uid => _auth.currentUser!.uid;

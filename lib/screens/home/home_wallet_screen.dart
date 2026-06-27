@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,9 +6,56 @@ import 'package:intl/intl.dart';
 import '../qr/scan_qr_screen.dart';
 import '../qr/my_qr_screen.dart';
 import '../topup/topup_screen.dart';
+import '../payment/payment_screen.dart';
+import '../../services/deeplink_service.dart';
 
-class HomeWalletScreen extends StatelessWidget {
+class HomeWalletScreen extends StatefulWidget {
   const HomeWalletScreen({super.key});
+
+  @override
+  State<HomeWalletScreen> createState() => _HomeWalletScreenState();
+}
+
+class _HomeWalletScreenState extends State<HomeWalletScreen> {
+  StreamSubscription<Uri>? _deepLinkSubscription;
+
+  void _openPayment(Uri uri) {
+    if (uri.scheme != "pokemonwallet") return;
+    if (uri.host != "pay") return;
+
+    final amount = int.tryParse(uri.queryParameters["amount"] ?? "0") ?? 0;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => PaymentScreen(amount: amount)),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final initial = DeepLinkService.instance.lastUri;
+
+      if (initial != null) {
+        _openPayment(initial);
+        DeepLinkService.instance.clearLastUri();
+      }
+    });
+
+    _deepLinkSubscription = DeepLinkService.instance.stream.listen((uri) {
+      if (!mounted) return;
+
+      _openPayment(uri);
+    });
+  }
+
+  @override
+  void dispose() {
+    _deepLinkSubscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +63,6 @@ class HomeWalletScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
-
       appBar: AppBar(
         elevation: 0,
         backgroundColor: const Color(0xFFE3350D),
@@ -24,7 +71,6 @@ class HomeWalletScreen extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
-
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('wallets')
@@ -76,7 +122,6 @@ class HomeWalletScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 16),
-
                     Expanded(
                       child: FutureBuilder<DocumentSnapshot>(
                         future: FirebaseFirestore.instance
@@ -154,7 +199,7 @@ class HomeWalletScreen extends StatelessWidget {
                   ),
                   child: Stack(
                     children: [
-                      Positioned(
+                      const Positioned(
                         right: -20,
                         top: -20,
                         child: Opacity(
@@ -229,7 +274,6 @@ class HomeWalletScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-
                     Expanded(
                       child: _ActionCard(
                         icon: Icons.qr_code,
@@ -246,7 +290,6 @@ class HomeWalletScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-
                     Expanded(
                       child: _ActionCard(
                         icon: Icons.qr_code_scanner,
@@ -270,9 +313,7 @@ class HomeWalletScreen extends StatelessWidget {
                         },
                       ),
                     ),
-
                     const SizedBox(width: 12),
-
                     Expanded(
                       child: _ActionCard(
                         icon: Icons.history,
@@ -306,6 +347,7 @@ class HomeWalletScreen extends StatelessWidget {
                     ],
                   ),
                   child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                    // Optimasi: Menambahkan orderBy agar transaksi terbaru berada di atas
                     stream: FirebaseFirestore.instance
                         .collection('wallet_transactions')
                         .where('uid', isEqualTo: uid)
