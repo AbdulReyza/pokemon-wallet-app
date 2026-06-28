@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../services/wallet_service.dart';
+import '../../services/authenticator_service.dart';
 
 class PaymentScreen extends StatefulWidget {
   final int amount;
@@ -15,15 +16,83 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
+  Future<String?> _showAuthenticatorDialog() async {
+    final controller = TextEditingController();
+
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text("Verifikasi Authenticator"),
+          content: TextField(
+            controller: controller,
+            keyboardType: TextInputType.number,
+            maxLength: 6,
+            decoration: const InputDecoration(
+              hintText: "Masukkan 6 digit kode",
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Batal"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, controller.text.trim());
+              },
+              child: const Text("Verifikasi"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   bool loading = false;
 
   Future<void> pay() async {
     setState(() {
       loading = true;
     });
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    // Minta kode Authenticator
+    final code = await _showAuthenticatorDialog();
+
+    if (code == null) {
+      setState(() {
+        loading = false;
+      });
+      return;
+    }
+
+    // Ambil secret dari Firestore
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get();
+
+    final secret = userDoc.data()?['totpSecret'];
+
+    if (secret == null ||
+        !AuthenticatorService.verifyCode(secret: secret, code: code)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Kode Authenticator salah")),
+        );
+      }
+
+      setState(() {
+        loading = false;
+      });
+
+      return;
+    }
 
     try {
-      final uid = FirebaseAuth.instance.currentUser!.uid;
+      // final uid = FirebaseAuth.instance.currentUser!.uid;
 
       final wallet = await FirebaseFirestore.instance
           .collection('wallets')
