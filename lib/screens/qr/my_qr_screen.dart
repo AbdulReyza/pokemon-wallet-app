@@ -7,6 +7,7 @@ class MyQrScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Mengambil UID pengguna yang sedang login
     final uid = FirebaseAuth.instance.currentUser!.uid;
 
     return Scaffold(
@@ -14,6 +15,7 @@ class MyQrScreen extends StatelessWidget {
         backgroundColor: const Color(0xFFE3350D),
         title: const Text("My QR", style: TextStyle(color: Colors.white)),
       ),
+      // Halaman untuk menampilkan QR Code milik pengguna
       body: Center(
         child: Card(
           elevation: 4,
@@ -29,6 +31,7 @@ class MyQrScreen extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
+                // Menampilkan QR Code yang berisi UID pengguna
                 QrImageView(data: uid, size: 250),
 
                 const SizedBox(height: 20),

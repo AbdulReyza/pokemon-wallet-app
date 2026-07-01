@@ -17,8 +17,10 @@ class HomeWalletScreen extends StatefulWidget {
 }
 
 class _HomeWalletScreenState extends State<HomeWalletScreen> {
+  // Subscription untuk mendengarkan Deep Link yang masuk
   StreamSubscription<Uri>? _deepLinkSubscription;
 
+  // Membuka halaman pembayaran berdasarkan data dari Deep Link
   void _openPayment(Uri uri) {
     if (uri.scheme != "pokemonwallet") return;
     if (uri.host != "pay") return;
@@ -34,7 +36,7 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
   @override
   void initState() {
     super.initState();
-
+    // Mengecek apakah aplikasi dibuka melalui Deep Link
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final initial = DeepLinkService.instance.lastUri;
 
@@ -53,12 +55,14 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
 
   @override
   void dispose() {
+    // Menghentikan listener Deep Link saat halaman ditutup
     _deepLinkSubscription?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Mengambil UID pengguna yang sedang login
     final uid = FirebaseAuth.instance.currentUser!.uid;
 
     return Scaffold(
@@ -71,6 +75,7 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
+      // Mendeteksi perubahan data saldo wallet secara realtime
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('wallets')
@@ -95,7 +100,7 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// HEADER TRAINER
+                // Menampilkan informasi profil pengguna
                 Row(
                   children: [
                     Container(
@@ -178,7 +183,7 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
 
                 const SizedBox(height: 24),
 
-                /// WALLET CARD
+                // Menampilkan informasi saldo wallet pengguna
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(24),
@@ -249,13 +254,13 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
 
                 const SizedBox(height: 28),
 
-                /// QUICK ACTIONS
                 const Text(
                   "Quick Actions",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 14),
 
+                // tombol untuk topup
                 Row(
                   children: [
                     Expanded(
@@ -327,7 +332,7 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
 
                 const SizedBox(height: 30),
 
-                /// RECENT TRANSACTIONS
+                // tombol untuk mengecek transaksi
                 const Text(
                   "Recent Transactions",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -347,7 +352,6 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
                     ],
                   ),
                   child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                    // Optimasi: Menambahkan orderBy agar transaksi terbaru berada di atas
                     stream: FirebaseFirestore.instance
                         .collection('wallet_transactions')
                         .where('uid', isEqualTo: uid)
@@ -374,7 +378,7 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
                           ),
                         );
                       }
-
+                      // berfungsi untuk mencetak transaksi dari topup atau pembelian kartu di marketplace
                       return Column(
                         children: docs.map((doc) {
                           final data = doc.data();
@@ -432,7 +436,7 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
   }
 }
 
-/// ACTION CARD
+// adalah action card
 class _ActionCard extends StatelessWidget {
   final IconData icon;
   final String title;

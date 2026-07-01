@@ -16,6 +16,7 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
+  // Menampilkan dialog untuk memasukkan kode Google Authenticator
   Future<String?> _showAuthenticatorDialog() async {
     final controller = TextEditingController();
 
@@ -25,6 +26,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       builder: (_) {
         return AlertDialog(
           title: const Text("Verifikasi Authenticator"),
+          // Input kode autentikasi 6 digit
           content: TextField(
             controller: controller,
             keyboardType: TextInputType.number,
@@ -50,8 +52,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
+  // Status loading selama proses pembayaran berlangsung
   bool loading = false;
-
+  // Proses pembayaran menggunakan saldo wallet
   Future<void> pay() async {
     setState(() {
       loading = true;
@@ -68,14 +71,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
       return;
     }
 
-    // Ambil secret dari Firestore
+    // Mengambil secret Authenticator milik pengguna dari Firestore
     final userDoc = await FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
         .get();
 
     final secret = userDoc.data()?['totpSecret'];
-
+    // Memverifikasi kode Authenticator yang dimasukkan pengguna
     if (secret == null ||
         !AuthenticatorService.verifyCode(secret: secret, code: code)) {
       if (mounted) {
@@ -92,15 +95,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
 
     try {
-      // final uid = FirebaseAuth.instance.currentUser!.uid;
-
+      // Mengambil data saldo wallet pengguna
       final wallet = await FirebaseFirestore.instance
           .collection('wallets')
           .doc(uid)
           .get();
 
       final balance = wallet.data()?['balance'] ?? 0;
-
+      // Memastikan saldo mencukupi untuk melakukan pembayaran
       if (balance < widget.amount) {
         if (!mounted) return;
 
@@ -114,11 +116,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
         return;
       }
+      // Mengurangi saldo wallet sesuai nominal pembayaran
       await WalletService().payOrder(
         orderId: DateTime.now().millisecondsSinceEpoch.toString(),
         amount: widget.amount,
       );
-
+      // Menyimpan riwayat transaksi pembayaran ke Firestore
       await FirebaseFirestore.instance.collection("wallet_transactions").add({
         "uid": uid,
         "amount": widget.amount,
@@ -131,13 +134,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Pembayaran berhasil")));
-
+      // Mengirim Deep Link ke aplikasi marketplace setelah pembayaran berhasil
       final uri = Uri.parse("pokemonmarket://payment-success");
 
       await launchUrl(uri, mode: LaunchMode.externalApplication);
       if (mounted) {
         Navigator.pop(context);
-      }
+      } // Menampilkan pesan jika proses pembayaran gagal
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -159,6 +162,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Tampilan halaman konfirmasi pembayaran
     return Scaffold(
       appBar: AppBar(
         title: const Text("Pokemon Payment"),
@@ -177,7 +181,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
 
             const SizedBox(height: 20),
-
+            // Menampilkan total nominal yang harus dibayar
             const Text(
               "Pokemon Marketplace",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -186,7 +190,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             const SizedBox(height: 10),
 
             const Text("Total Pembayaran"),
-
+            // Tombol untuk memulai proses pembayaran
             const SizedBox(height: 20),
 
             Text(
