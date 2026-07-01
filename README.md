@@ -10,6 +10,7 @@ Pokemon Wallet adalah aplikasi dompet digital sederhana berbasis Flutter yang te
 - Menampilkan riwayat transaksi
 - Menampilkan transaksi terbaru
 - Integrasi dengan Firebase
+- Menampilkan Payment Request Page ketika user checkout marketplace
 
 ## Tampilan Aplikasi
 
@@ -26,6 +27,10 @@ Pokemon Wallet adalah aplikasi dompet digital sederhana berbasis Flutter yang te
 ### Top Up
 
 <img width="486" height="316" alt="Screenshot 2026-06-18 063222" src="https://github.com/user-attachments/assets/ed2cdb23-d65d-4f6f-8ad4-7a6746648de3" />
+
+
+### Alur deeplink
+<img width="721" height="494" alt="image" src="https://github.com/user-attachments/assets/16296f97-e349-476f-8e50-8892c697cede" />
 
 
 
