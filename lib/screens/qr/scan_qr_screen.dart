@@ -8,7 +8,6 @@ class ScanQrScreen extends StatefulWidget {
   State<ScanQrScreen> createState() => _ScanQrScreenState();
 }
 
-// kode qr saja
 class _ScanQrScreenState extends State<ScanQrScreen> {
   bool scanned = false;
 

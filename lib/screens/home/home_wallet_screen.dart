@@ -17,10 +17,8 @@ class HomeWalletScreen extends StatefulWidget {
 }
 
 class _HomeWalletScreenState extends State<HomeWalletScreen> {
-  // Subscription untuk mendengarkan Deep Link yang masuk
   StreamSubscription<Uri>? _deepLinkSubscription;
 
-  // Membuka halaman pembayaran berdasarkan data dari Deep Link
   void _openPayment(Uri uri) {
     if (uri.scheme != "pokemonwallet") return;
     if (uri.host != "pay") return;
@@ -36,7 +34,7 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
   @override
   void initState() {
     super.initState();
-    // Mengecek apakah aplikasi dibuka melalui Deep Link
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final initial = DeepLinkService.instance.lastUri;
 
@@ -55,14 +53,12 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
 
   @override
   void dispose() {
-    // Menghentikan listener Deep Link saat halaman ditutup
     _deepLinkSubscription?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Mengambil UID pengguna yang sedang login
     final uid = FirebaseAuth.instance.currentUser!.uid;
 
     return Scaffold(
@@ -75,7 +71,7 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
-      // Mendeteksi perubahan data saldo wallet secara realtime
+
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('wallets')
@@ -100,7 +96,6 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Menampilkan informasi profil pengguna
                 Row(
                   children: [
                     Container(
@@ -183,7 +178,6 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
 
                 const SizedBox(height: 24),
 
-                // Menampilkan informasi saldo wallet pengguna
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(24),
@@ -260,7 +254,6 @@ class _HomeWalletScreenState extends State<HomeWalletScreen> {
                 ),
                 const SizedBox(height: 14),
 
-                // tombol untuk topup
                 Row(
                   children: [
                     Expanded(

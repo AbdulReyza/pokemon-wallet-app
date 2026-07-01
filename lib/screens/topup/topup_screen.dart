@@ -9,14 +9,13 @@ class TopUpScreen extends StatefulWidget {
 }
 
 class _TopUpScreenState extends State<TopUpScreen> {
-  // Controller untuk input nominal top up
   final amountController = TextEditingController();
-  // Status loading selama proses top up
+
   bool isLoading = false;
-  // Proses menambahkan saldo ke wallet
+
   Future<void> topUp() async {
     final amount = int.tryParse(amountController.text);
-    // Memastikan nominal yang dimasukkan valid
+
     if (amount == null || amount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Masukkan nominal yang valid')),
@@ -38,7 +37,6 @@ class _TopUpScreenState extends State<TopUpScreen> {
 
         Navigator.pop(context);
       }
-      // Menampilkan pesan jika proses top up gagal
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -52,14 +50,12 @@ class _TopUpScreenState extends State<TopUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Tampilan halaman top up wallet
     return Scaffold(
       appBar: AppBar(title: const Text("Top Up Wallet")),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // Input nominal saldo yang akan ditambahkan
             TextField(
               controller: amountController,
               keyboardType: TextInputType.number,
@@ -70,7 +66,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
             ),
 
             const SizedBox(height: 20),
-            // Tombol untuk memulai proses top up
+
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

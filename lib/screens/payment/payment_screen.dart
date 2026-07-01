@@ -116,12 +116,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
         return;
       }
-      // Mengurangi saldo wallet sesuai nominal pembayaran
+
       await WalletService().payOrder(
         orderId: DateTime.now().millisecondsSinceEpoch.toString(),
         amount: widget.amount,
       );
-      // Menyimpan riwayat transaksi pembayaran ke Firestore
+
       await FirebaseFirestore.instance.collection("wallet_transactions").add({
         "uid": uid,
         "amount": widget.amount,
@@ -134,13 +134,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Pembayaran berhasil")));
-      // Mengirim Deep Link ke aplikasi marketplace setelah pembayaran berhasil
+
       final uri = Uri.parse("pokemonmarket://payment-success");
 
       await launchUrl(uri, mode: LaunchMode.externalApplication);
       if (mounted) {
         Navigator.pop(context);
-      } // Menampilkan pesan jika proses pembayaran gagal
+      }
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -162,7 +162,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Tampilan halaman konfirmasi pembayaran
     return Scaffold(
       appBar: AppBar(
         title: const Text("Pokemon Payment"),
@@ -181,7 +180,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
 
             const SizedBox(height: 20),
-            // Menampilkan total nominal yang harus dibayar
+
             const Text(
               "Pokemon Marketplace",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -190,7 +189,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             const SizedBox(height: 10),
 
             const Text("Total Pembayaran"),
-            // Tombol untuk memulai proses pembayaran
+
             const SizedBox(height: 20),
 
             Text(

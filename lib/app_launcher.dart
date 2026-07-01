@@ -9,13 +9,12 @@ class AppLauncher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mengecek apakah pengguna sudah login
     final user = FirebaseAuth.instance.currentUser;
-    // Jika sudah login, arahkan ke halaman utama wallet
+
     if (user != null) {
       return const HomeWalletScreen();
     }
-    // Jika belum login, tampilkan halaman login
+
     return const LoginScreen();
   }
 }

@@ -13,7 +13,6 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-// kolom input email dan password
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -23,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return (100000 + random.nextInt(900000)).toString();
   }
 
-  // fungsi untuk menghandle login screen
   Future<void> login() async {
     try {
       final authProvider = context.read<AuthProvider>();
@@ -32,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-      // collection firebase menghandle otp
+
       final uid = authProvider.user!.uid;
 
       final otp = generateOtp();
@@ -43,19 +41,19 @@ class _LoginScreenState extends State<LoginScreen> {
           DateTime.now().add(const Duration(minutes: 5)),
         ),
       });
-      // mengirim otp ke gmail
+
       await EmailService().sendOtp(
         email: emailController.text.trim(),
         otp: otp,
       );
 
       if (!mounted) return;
-      // verifikasi di kirim ke auth verification screen
+
       final verified = await Navigator.push<bool>(
         context,
         MaterialPageRoute(builder: (_) => const AuthVerificationScreen()),
       );
-      // jika verif gagal
+
       if (verified != true) {
         await authProvider.logout();
 
@@ -111,7 +109,6 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const SizedBox(height: 30),
 
-              // logo
               Container(
                 width: 120,
                 height: 120,

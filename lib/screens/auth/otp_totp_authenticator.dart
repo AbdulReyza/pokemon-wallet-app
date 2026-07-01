@@ -11,10 +11,8 @@ class AuthVerificationScreen extends StatefulWidget {
 }
 
 class _AuthVerificationScreenState extends State<AuthVerificationScreen> {
-  // Controller untuk input kode OTP
   final pinController = TextEditingController();
 
-  // Status loading dan countdown masa berlaku OTP
   bool loading = false;
   int seconds = 300;
   Timer? timer;
@@ -23,7 +21,6 @@ class _AuthVerificationScreenState extends State<AuthVerificationScreen> {
   void initState() {
     super.initState();
 
-    // Memulai timer countdown OTP
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
 
@@ -37,20 +34,17 @@ class _AuthVerificationScreenState extends State<AuthVerificationScreen> {
 
   @override
   void dispose() {
-    // Membersihkan resource saat halaman ditutup
     timer?.cancel();
     pinController.dispose();
     super.dispose();
   }
 
-  // Memvalidasi kode OTP yang dimasukkan pengguna
   Future<void> verify() async {
     setState(() => loading = true);
 
     try {
       final uid = FirebaseAuth.instance.currentUser!.uid;
 
-      // Mengambil data OTP dari Firestore
       final doc = await FirebaseFirestore.instance
           .collection('otp_codes')
           .doc(uid)
@@ -64,19 +58,16 @@ class _AuthVerificationScreenState extends State<AuthVerificationScreen> {
       final savedOtp = data['otp'];
       final expiresAt = (data['expiresAt'] as Timestamp).toDate();
 
-      // Memastikan OTP belum kedaluwarsa
       if (DateTime.now().isAfter(expiresAt)) {
         throw Exception("OTP sudah expired");
       }
 
-      // Mencocokkan OTP yang diinput dengan data di database
       if (pinController.text.trim() == savedOtp) {
         Navigator.pop(context, true);
       } else {
         throw Exception("Kode OTP salah");
       }
     } catch (e) {
-      // Menampilkan pesan error jika verifikasi gagal
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(e.toString())));
@@ -91,7 +82,6 @@ class _AuthVerificationScreenState extends State<AuthVerificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        // Tampilan halaman verifikasi OTP
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFFE3350D), Color(0xFF3B82F6)],
@@ -163,7 +153,6 @@ class _AuthVerificationScreenState extends State<AuthVerificationScreen> {
 
                   const SizedBox(height: 20),
 
-                  // Input kode OTP
                   TextField(
                     controller: pinController,
                     keyboardType: TextInputType.number,
@@ -188,7 +177,6 @@ class _AuthVerificationScreenState extends State<AuthVerificationScreen> {
 
                   const SizedBox(height: 20),
 
-                  // Tombol untuk memulai proses verifikasi OTP
                   SizedBox(
                     width: double.infinity,
                     height: 52,

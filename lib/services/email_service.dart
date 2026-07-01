@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-// kirim otp ke gmail
 class EmailService {
   Future<void> sendOtp({required String email, required String otp}) async {
     final response = await http.post(
